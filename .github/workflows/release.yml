@@ -55,11 +55,12 @@ jobs:
           docker push quay.io/${{ secrets.QUAY_NAMESPACE }}/$IMAGE_NAME:latest
 
       - name: Trigger children
-        if: ${{ github.event.inputs.trigger_children }}
+        if: ${{ inputs.trigger_children }}
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.BOT_TOKEN }}
           script: |
+            console.log(context.payload)
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: 'activemq-artemis-broker-kubernetes-image',
@@ -67,11 +68,11 @@ jobs:
               ref: 'main',
               inputs: {
                 version: '*.*.+',
-                update_version: true,
+                update_version: 'true',
                 base_image: 'latest',
-                update_base_image: true,
+                update_base_image: 'true',
                 activemq_artemis_version: 'latest',
-                update_activemq_artemis_version: true,
-                trigger_release: 'children'
+                update_activemq_artemis_version: 'true',
+                trigger_release: 'all'
               }
             });
