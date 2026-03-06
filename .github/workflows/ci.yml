@@ -4,8 +4,6 @@ env:
   IMAGE_NAME: arkmq-org-broker
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
   schedule:
@@ -30,7 +28,6 @@ on:
 
 jobs:
   build:
-    if: ${{ github.event_name != 'push' && !startsWith(github.event.head_commit.message, '[NO-ISSUE]') }}
     runs-on: ubuntu-latest
     steps:
       - name: Install prerequisites
